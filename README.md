@@ -3,12 +3,16 @@
 Telegram channel crawling using Telethon, Django and Elastic Search.
 
 # Requirements
-<li> python3.8 
-<li> python3.8 -m pip install -r requirements.txt
+<ol>
+<li> python3.8 </li> 
+<li> python3.8 -m pip install -r requirements.txt </li>
+</ol>
 
 # Usage
-`python 3.8 manage.py makemigrations crawler`
+`python 3.8 manage.py makemigrations crawler` 
+<br>
 `python 3.8 manage.py migrate`
+<br>
 `python 3.8 manage.py runserver`
 
 Telegram channel posts are crawled every 60 minutes after running server and enable celery.
