@@ -39,7 +39,7 @@ CELERY_TIMEZONE = 'Asia/Tehran'
 CELERY_BEAT_SCHEDULE = {
     'crawle-telegram-channel': {
         'task': 'crawler.tasks.crawle_telegram_channel',
-        'schedule': crontab(minute='*/1', hour='*'),
+        'schedule': crontab(minute='*/60', hour='*'),
         # 'args': (*args)
     },
 }

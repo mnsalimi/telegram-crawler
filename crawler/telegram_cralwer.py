@@ -9,20 +9,23 @@ def utc_to_local(utc_dt):
 
 class TelegramCrawler:
     def __init__(self) -> None:
-        self.api_id = 1684286022
-        self.api_hash = '1688656102'
+        self.api_id = 1688602
+        self.api_hash = '047ef442931cc10db39944883cab5041'
     
     def crawle_channel(self):
         res = []
         now = datetime.now()
-        with TelegramClient("moein", self.api_id, self.api_hash) as client:
+        with TelegramClient("myses", self.api_id, self.api_hash) as client:
             for message in client.iter_messages("tehranboursemarket"):
                 temp = {}
                 message.date = utc_to_local(message.date).strftime('%Y-%m-%d %H:%M:%S.%f %Z%z')
-                message.date = datetime.strptime(message.date, '%Y-%m-%d %H:%M:%S.%f %Z%z') + timedelta(hours=24)
-                message.date = str(message.date).split("+")[0]
-                message.date = datetime.strptime(message.date, '%Y-%m-%d %H:%M:%S') 
-                if now<message.date:
+                compared_date = datetime.strptime(message.date, '%Y-%m-%d %H:%M:%S.%f %Z%z') + timedelta(hours=24)
+                compared_date = str(compared_date).split("+")[0]
+                compared_date = datetime.strptime(compared_date, '%Y-%m-%d %H:%M:%S')
+                message.date = str(message.date).split("+")[0].split(".")[0]
+                message.date = datetime.strptime(message.date, '%Y-%m-%d %H:%M:%S')
+
+                if now<compared_date:
                     temp['post_id'] = message.id
                     temp['channel_id'] = message.peer_id.channel_id
                     temp['datetime'] = message.date
