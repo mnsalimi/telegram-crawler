@@ -1,4 +1,4 @@
 env
-*.sessio
+*session
 db.sqlite3
 __pycache__
