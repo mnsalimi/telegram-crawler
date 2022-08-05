@@ -1,4 +1,4 @@
-# telegram-cralwer
+# telegram-crawler
 
 Telegram channel crawling using Telethon, Django and Elastic Search.
 
