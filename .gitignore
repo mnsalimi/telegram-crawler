@@ -1,0 +1,4 @@
+env
+*.sessio
+db.sqlite3
+__pycache__
