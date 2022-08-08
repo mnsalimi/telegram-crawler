@@ -6,4 +6,13 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('post_id', 'channel_id', 'datetime', 'message', 'views')
+        fields = (
+            'post_id',
+            'channel_id',
+            'datetime',
+            'views',
+            'message',
+            'symbols',
+            'sentiment',
+            'images_path',
+        )

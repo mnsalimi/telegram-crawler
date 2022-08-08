@@ -19,7 +19,11 @@ class PostDocument(Document):
         fields = [
             'post_id',
             'channel_id',
+            'channel_name',
             'datetime',
-            'message',
             'views',
+            'message',
+            'symbols',
+            'sentiment',
+            'photo',
         ]

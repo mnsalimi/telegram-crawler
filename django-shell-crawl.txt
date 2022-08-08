@@ -1,0 +1,6 @@
+import pytz
+from datetime import datetime
+from crawler.tasks import crawl_telegram_channel
+limit_datetime = datetime(2021, 8, 1)
+limit_datetime = pytz.utc.localize(limit_datetime)
+crawl_telegram_channel(limit_datetime)

@@ -27,7 +27,8 @@ SECRET_KEY = 'qqctvba7ziq898fmpg63fa7@k*7p@6g619dof4=-n&q=ic1q9n'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Application definition
 CELERY_BROKER_URL = 'redis://localhost:6379'
@@ -39,7 +40,7 @@ CELERY_TIMEZONE = 'Asia/Tehran'
 CELERY_BEAT_SCHEDULE = {
     'crawle-telegram-channel': {
         'task': 'crawler.tasks.crawle_telegram_channel',
-        'schedule': crontab(minute='*/60', hour='*'),
+        'schedule': crontab(minute='*/1', hour='*'),
         # 'args': (*args)
     },
 }
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl',
     'crawler',
     'rest_framework',
+    'sorl.thumbnail',
     
 ]
 

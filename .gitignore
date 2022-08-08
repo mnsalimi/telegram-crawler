@@ -2,3 +2,5 @@ env
 *session
 db.sqlite3
 __pycache__
+data
+media
