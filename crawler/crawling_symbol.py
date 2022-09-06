@@ -1,11 +1,22 @@
-from locale import normalize
 import pickle
-from tkinter import Y
-from unittest import result
+from unittest import registerResult, result
 import requests
 from bs4 import BeautifulSoup
 from hazm import Normalizer
 normalizer = Normalizer() 
+
+CSV_COLUMNS = [
+    "symbol_code",
+    "group",
+    "industry_group",
+    "tablo",
+    "english_symbol",
+    "english_symbol_name",
+    "persian_symbol",
+    "persian_symbol_name",
+    "is_certain",
+    "is_certain_with_rules",
+]
 
 def crawl_symbol():
     URL = "http://www.tsetmc.com/Loader.aspx?ParTree=111C1417"
@@ -33,64 +44,70 @@ def crawl_symbol():
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(results)
-        
+
+def crawl_symbols_from_nabzebourse():
+    URL = "https://nabzebourse.com/fa/news/29381/stock-symbols-news"
+    resp = requests.get(URL)
+    soup = BeautifulSoup(resp.text, "lxml")
+    symbols = []
+    tds = soup.select('td')[1:]
+    for td in tds:
+        atags = td.select('a')
+        for atag in atags:
+            symbols.append(normalizer.normalize(atag.text))
+    return symbols
+
+def add_symbols_to_pickle_and_csv(new_symbols):
+    with open("data/symbols/symbols.pickle", "rb") as f:
+        pickle_symbols = pickle.load(f)
+    for symbol in new_symbols:
+        if symbol not in pickle_symbols:
+            pickle_symbols[symbol] = {}
+    with open("data/symbols/symbols.pickle", "wb") as f:
+        pickle.dump(pickle_symbols, f)
+    with open("data/symbols/symbols.csv", "w") as f:
+        for col in CSV_COLUMNS:
+            f.write(col+",")
+        f.write("\n")
+        for x, y in list(pickle_symbols.items())[1:]:
+            try:
+                f.write(y['symbol_code']+",")
+                f.write(y['group']+",")
+                f.write(y['industry_group']+",")
+                f.write(y['tablo']+",")
+                f.write(y['english_symbol']+",")
+                f.write(y['english_symbol_name']+",")
+                f.write(x+",")
+                f.write(y['persian_symbol_name']+",")
+                f.write(y['is_certain']+",")
+                f.write("\n")
+            except:
+                f.write(","*6+x+",\n")
+
+def create_pickle_by_csv():
+    with open("data/symbols/symbols.csv", "r") as f:
+        lines = [
+            line.replace("\n", "").split(",")
+            for line in f.readlines()[1:]
+        ]
+        results = {}
+        for line in lines:
+            results[line[6]] = {
+                "symbol_code": line[0],
+                "group": line[1],
+                "industry_group": line[2],
+                "tablo": line[3],
+                "english_symbol": line[4],
+                "english_symbol_name": line[5],
+                "persian_symbol_name": line[7],
+                "is_certain": line[8],
+                "is_certain_with_rules": line[9],
+            }
+        print(len(results))
+        with open("data/symbols/symbols.pickle", "wb") as f:
+            pickle.dump(results, f)
+
 if __name__ == "__main__":
-    # crawl_symbol()
-    # with open("people.csv", "r", encoding="utf-8") as f:
-    #     xx = f.readlines()
-    #     results = {}
-    #     for line in xx:
-    #         result = {}
-    #         line = [column.rstrip().lstrip().strip() for column in line.split(",")]
-    #         result['symbol_code'] = line[0]
-    #         result['group'] = line[1]
-    #         result['industry_group'] = normalizer.normalize(line[2])
-    #         result['tablo'] = normalizer.normalize(line[3])
-    #         result['english_symbol'] = line[4]
-    #         result['english_symbol_name'] = line[5]
-    #         result['persian_symbol'] = normalizer.normalize(line[6])
-    #         result['persian_symbol_name'] = normalizer.normalize(line[7])
-    #         result['is_certain'] = line[8]
-    #         # print(result)
-    #         results[result['persian_symbol']] = {
-    #             "symbol_code": result['symbol_code'],
-    #             "group": result['group'],
-    #             "industry_group": result['industry_group'],
-    #             "tablo": result['tablo'],
-    #             "english_symbol": result['english_symbol'],
-    #             "english_symbol_name": result['english_symbol_name'],
-    #             "persian_symbol_name": result['persian_symbol_name'],
-    #             "is_certain": result['is_certain'],
-    #         }
-    # with open('data/symbols_new.pickle', 'wb') as output_file:
-    #     pickle.dump(results, output_file)
-    # crawl_symbol()
-    with open('data/symbols.pickle', 'rb') as output_file:
-        xs = pickle.load(output_file)
-        print(xs)
-    #     with open("csv.csv", "w", encoding="utf-8") as f:
-    #         for x, y in xs.items():
-    #             f.write(
-    #                 x + "," + y["group"] + "," + y["industry_group"] + "," + y["tablo"] + "," +\
-    #                     y["english_symbol"] + "," + y["english_symbol_name"] + "," +
-    #                     y["persian_symbol"] + "," + y["persian_symbol_name"] + "\n"
-    #             )
-    # xx = list(xs.keys())
-    # for x in xx:
-    #     if len(x.split())>1:
-    #         print(x)
-    # res = {}
-    # for x, y in xs.items():
-    #     res[normalizer.normalize(x)] = {
-    #         "symbol_code": normalizer.normalize(y["symbol_code"]),
-    #         "group": normalizer.normalize(y["group"]),
-    #         "industry_group": normalizer.normalize(y["industry_group"]),
-    #         "tablo": normalizer.normalize(y["tablo"]),
-    #         "english_symbol": normalizer.normalize(y["english_symbol"]),
-    #         "english_symbol_name": normalizer.normalize(y["english_symbol_name"]),
-    #         "persian_symbol": normalizer.normalize(y["persian_symbol"]),
-    #         "persian_symbol_name": normalizer.normalize(y["persian_symbol_name"]),
-    #         "is_certain": normalizer.normalize(y["is_certain"]),
-    #     }
-    # with open('data/people_new.pickle', 'wb') as output_file:
-    #     pickle.dump(res, output_file)
+    # new_symbols = crawl_symbols_from_nabzebourse()
+    # add_symbols_to_pickle_and_csv(new_symbols)
+    create_pickle_by_csv()

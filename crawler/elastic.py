@@ -16,15 +16,15 @@ es = Elasticsearch()
 # res = es.indices.get_alias("*")
 # print(res)
 
-# res = es.search(index="posts", doc_type="_doc", body = {
-# 'size' : 100,
-# 'query': {
-#     'match_all' : {}
-# }
-# })
+res = es.search(index="posts", doc_type="_doc", body = {
+'size' : 100,
+'query': {
+    'match_all' : {}
+}
+})
 
-# resp = es.get(index="cars", id=1)
-# print(res)
+# resp = es.get(index="posts")
+print(len(res))
 # print(resp['_source'])
 
 # es.indices.refresh(index="test-index")
@@ -34,7 +34,7 @@ es = Elasticsearch()
 # for hit in resp['hits']['hits']:
 #     print("%(timestamp)s %(author)s: %(text)s" % hit["_source"])
 
-from elasticsearch import Elasticsearch
-es = Elasticsearch()
+# from elasticsearch import Elasticsearch
+# es = Elasticsearch()
 
-es.indices.delete(index='posts', ignore=[400, 404])
+# es.indices.delete(index='posts', ignore=[400, 404])

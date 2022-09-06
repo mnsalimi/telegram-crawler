@@ -7,7 +7,7 @@ from django.utils.html import mark_safe
 class BookAdmin(admin.ModelAdmin):
     
     search_fields = ['message']
-    list_per_page = 500
+    list_per_page = 800
     def thumbnail_preview(self, obj):
         return obj.thumbnail_preview
 

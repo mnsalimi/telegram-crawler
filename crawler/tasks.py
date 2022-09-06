@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 from turtle import pos
 from celery import shared_task
 from .models import Post 
-from .crawler_pipeline import CrawlerpPipeline
+from .telegram_crawler_pipeline import CrawlerpPipeline
 from .documents import PostDocument
 import datetime
 
@@ -45,8 +45,9 @@ def crawl_telegram_channel(limit_datetime=None):
         try:
             res_docs = PostDocument.search().query("match", post_id=res["post_id"])
             for _ in res_docs:
+                print("DUPLICATEEE")
                 doc_founded = True
-                break
+                    # break
         except:
             pass
         if not doc_founded:

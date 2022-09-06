@@ -27,3 +27,4 @@ class PostDocument(Document):
             'sentiment',
             'photo',
         ]
+        queryset_pagination = 5000
