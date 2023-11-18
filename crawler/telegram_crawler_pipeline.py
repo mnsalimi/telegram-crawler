@@ -24,9 +24,9 @@ class CrawlerPipeline:
     def __init__(self) -> None:
         self.normalizer = Normalizer() 
         self.channel_id = "ariyaz_1"
-        self.sesseion = "moein"
-        self.api_id = 1688602
-        self.api_hash = '047ef442931cc10db39944883cab5041'
+        self.sesseion = "gfhfgh"
+        self.api_id = gfdgfdg
+        self.api_hash = 'jklhjlk'
         dir_path = os.path.dirname(os.path.realpath(__file__))
         with open(
             os.path.join(dir_path, "data/symbols/symbols.pickle"),
